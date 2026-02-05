@@ -1,5 +1,6 @@
 import os
 import sys
+import platform
 from pathlib import Path
 
 # --- Base Detection ---
@@ -14,8 +15,14 @@ def get_app_root():
 def get_data_root():
     """Returns the writable data storage directory."""
     if getattr(sys, 'frozen', False):
-        # Store data in %APPDATA% on Windows when bundled
-        data_dir = Path(os.environ.get('APPDATA')) / "HumanitarianEditor"
+        # Platform-aware data directory for bundled app
+        system = platform.system()
+        if system == "Darwin":  # macOS
+            data_dir = Path.home() / "Library" / "Application Support" / "HumanitarianEditor"
+        elif system == "Windows":
+            data_dir = Path(os.environ.get('APPDATA')) / "HumanitarianEditor"
+        else:  # Linux
+            data_dir = Path.home() / ".config" / "HumanitarianEditor"
         data_dir.mkdir(parents=True, exist_ok=True)
         return data_dir
     # In development, keep data in the project root

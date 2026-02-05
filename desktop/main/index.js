@@ -64,8 +64,9 @@ function startBackend() {
   let args = [path.join(__dirname, '../../backend/main.py')];
 
   if (!isDev) {
-    // In production, run the bundled executable
-    command = path.join(process.resourcesPath, 'backend-dist', 'backend-engine.exe');
+    // In production, run the bundled executable (platform-aware)
+    const exeName = process.platform === 'win32' ? 'backend-engine.exe' : 'backend-engine';
+    command = path.join(process.resourcesPath, 'backend-dist', exeName);
     args = [];
   }
 

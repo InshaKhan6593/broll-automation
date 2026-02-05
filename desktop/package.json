@@ -17,6 +17,11 @@
       "target": "nsis",
       "signAndEditExecutable": false
     },
+    "mac": {
+      "target": ["zip"],
+      "category": "public.app-category.video",
+      "identity": null
+    },
     "files": [
       "main/**/*",
       "preload/**/*",

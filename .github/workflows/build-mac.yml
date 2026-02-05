@@ -1,0 +1,58 @@
+name: Build macOS App
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-mac:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install Python dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Bundle backend with PyInstaller
+        run: python desktop/bundle_backend.py
+
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm install
+          npm run build
+
+      - name: Copy frontend to desktop renderer
+        run: |
+          mkdir -p desktop/renderer
+          cp -r frontend/dist/* desktop/renderer/
+
+      - name: Install Electron dependencies
+        run: |
+          cd desktop
+          npm install
+
+      - name: Build Electron app for macOS
+        run: |
+          cd desktop
+          npm run pack
+
+      - name: Upload macOS app
+        uses: actions/upload-artifact@v4
+        with:
+          name: HumanitarianVideoEditor-macOS
+          path: desktop/dist/mac*/
+          retention-days: 30

@@ -1,6 +1,8 @@
 import os
+import sys
 import subprocess
 import shutil
+import platform
 from pathlib import Path
 
 def bundle_backend():
@@ -14,6 +16,9 @@ def bundle_backend():
     if output_dir.exists():
         shutil.rmtree(output_dir)
 
+    # PyInstaller path separator: ';' on Windows, ':' on macOS/Linux
+    sep = ';' if platform.system() == 'Windows' else ':'
+
     # PyInstaller Command
     cmd = [
         "pyinstaller",
@@ -23,9 +28,9 @@ def bundle_backend():
         f"--distpath={output_dir.parent}",
         f"--workpath={project_root / 'temp' / 'pyinstaller_work'}",
         f"--name=backend-engine",
-        # Include necessary data files
-        f"--add-data={project_root / 'prompts'};prompts",
-        f"--add-data={project_root / 'src'};src",
+        # Include necessary data files (';' on Windows, ':' on macOS/Linux)
+        f"--add-data={project_root / 'prompts'}{sep}prompts",
+        f"--add-data={project_root / 'src'}{sep}src",
         # Collect all submodules for complex packages
         "--collect-submodules=chromadb",
         "--collect-submodules=langchain",
