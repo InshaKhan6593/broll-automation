@@ -1,0 +1,91 @@
+# ======================
+# Environment / Secrets
+# ======================
+venv/
+.env
+.env.*
+
+# ======================
+# Python
+# ======================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+
+# ======================
+# PyInstaller
+# ======================
+backend-engine.spec
+temp/pyinstaller_work/
+
+# ======================
+# Logs & Runtime Data
+# ======================
+logs/
+*.log
+
+# ======================
+# Databases / Local State
+# ======================
+chroma_db/
+*.sqlite
+*.sqlite3
+
+# ======================
+# Generated Data Files
+# ======================
+image_index.json
+video_transcript.json
+semantic_segments.json
+edit_decision_list.json
+temp_image_index.json
+
+# ======================
+# Media / Generated Outputs
+# ======================
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.wav
+*.mp3
+outputs/
+temp/
+uploads/
+
+# ======================
+# Frontend (Node / React / Vite)
+# ======================
+node_modules/
+dist/
+build/
+.cache/
+
+# ======================
+# Desktop App Build Artifacts
+# ======================
+desktop/dist/
+desktop/dist_test/
+desktop/backend-dist/
+desktop/renderer/
+desktop/node_modules/
+
+# ======================
+# OS junk
+# ======================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ======================
+# IDE / Editor
+# ======================
+.vscode/
+.idea/
+
+# ======================
+# Claude Code
+# ======================
+.claude/

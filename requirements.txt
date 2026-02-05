@@ -1,0 +1,26 @@
+# Core
+openai
+langchain
+langgraph
+python-dotenv
+
+# Video Processing
+moviepy<2.0
+imageio[ffmpeg-download]
+
+# Data
+pandas
+numpy
+pillow
+requests
+
+# AI Models
+groq
+chromadb
+ollama
+
+# Backend
+fastapi
+uvicorn[standard]
+python-multipart
+sse-starlette
