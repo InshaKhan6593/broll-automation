@@ -1,9 +1,9 @@
 version: 2.1
 
 jobs:
-  build-arm64:
+  build-mac:
     macos:
-      xcode: "15.4.0"  # Apple Silicon
+      xcode: "15.4.0"
     resource_class: macos.m1.medium.gen1
     steps:
       - checkout
@@ -20,49 +20,6 @@ jobs:
       - run:
           name: Bundle backend
           command: python3 desktop/bundle_backend.py
-      - run:
-          name: Rename for architecture
-          command: mv desktop/backend-dist desktop/backend-dist-arm64
-      - persist_to_workspace:
-          root: desktop
-          paths:
-            - backend-dist-arm64
-
-  build-x64:
-    macos:
-      xcode: "14.2.0"  # Intel
-    resource_class: macos.x86.medium.gen2
-    steps:
-      - checkout
-      - run:
-          name: Setup Python
-          command: |
-            brew install python@3.12
-            echo 'export PATH="/usr/local/opt/python@3.12/bin:$PATH"' >> $BASH_ENV
-      - run:
-          name: Install Python dependencies
-          command: |
-            pip3 install -r requirements.txt
-            pip3 install pyinstaller
-      - run:
-          name: Bundle backend
-          command: python3 desktop/bundle_backend.py
-      - run:
-          name: Rename for architecture
-          command: mv desktop/backend-dist desktop/backend-dist-x64
-      - persist_to_workspace:
-          root: desktop
-          paths:
-            - backend-dist-x64
-
-  build-electron:
-    macos:
-      xcode: "15.4.0"
-    resource_class: macos.m1.medium.gen1
-    steps:
-      - checkout
-      - attach_workspace:
-          at: desktop
       - run:
           name: Setup Node.js
           command: |
@@ -96,9 +53,4 @@ jobs:
 workflows:
   build-macos:
     jobs:
-      - build-arm64
-      - build-x64
-      - build-electron:
-          requires:
-            - build-arm64
-            - build-x64
+      - build-mac
