@@ -11,14 +11,7 @@ on:
 
 jobs:
   build-mac:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        include:
-          - os: macos-13
-            arch: x64
-          - os: macos-14
-            arch: arm64
+    runs-on: macos-latest
 
     steps:
       - name: Checkout code
@@ -28,7 +21,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          architecture: ${{ matrix.arch }}
 
       - name: Setup Node.js 20
         uses: actions/setup-node@v4
@@ -59,14 +51,19 @@ jobs:
           cd desktop
           npm install
 
-      - name: Build Electron app for macOS (${{ matrix.arch }})
+      - name: Build Electron app (x64)
         run: |
           cd desktop
-          npm run dist -- --mac --${{ matrix.arch }}
+          npm run dist -- --mac --x64
+
+      - name: Build Electron app (arm64)
+        run: |
+          cd desktop
+          npm run dist -- --mac --arm64
 
       - name: Upload macOS artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: HumanitarianVideoEditor-macOS-${{ matrix.arch }}
+          name: HumanitarianVideoEditor-macOS-Universal
           path: desktop/dist/*.zip
           retention-days: 5
