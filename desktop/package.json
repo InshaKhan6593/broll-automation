@@ -18,7 +18,7 @@
       "signAndEditExecutable": false
     },
     "mac": {
-      "target": ["zip"],
+      "target": ["zip", "dmg"],
       "category": "public.app-category.video",
       "identity": null
     },
