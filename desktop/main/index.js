@@ -80,14 +80,33 @@ function startBackend() {
     }
   });
 
+  const fs = require('fs');
+  const logPath = path.join(app.getPath('desktop'), 'humanitarian-editor-debug.log');
+  const log = (msg) => {
+    try {
+      fs.appendFileSync(logPath, msg + '\n');
+    } catch (e) {}
+    console.log(msg);
+  };
+
+  log(`[${new Date().toISOString()}] Attempting to launch backend: ${command}`);
+
   pythonProcess.stdout.on('data', (data) => {
     const text = data.toString('utf-8');
-    console.log(`Backend: ${text}`);
+    log(`Backend: ${text}`);
   });
 
   pythonProcess.stderr.on('data', (data) => {
     const text = data.toString('utf-8');
-    console.error(`Backend Error: ${text}`);
+    log(`Backend Error: ${text}`);
+  });
+
+  pythonProcess.on('error', (err) => {
+     log(`Failed to start subprocess: ${err}`);
+  });
+
+  pythonProcess.on('close', (code) => {
+    log(`Backend process exited with code ${code}`);
   });
 
   pythonProcess.on('close', (code) => {

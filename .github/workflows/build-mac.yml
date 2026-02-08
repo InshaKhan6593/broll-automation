@@ -53,11 +53,13 @@ jobs:
 
       - name: Build Electron app (x64)
         run: |
+          chmod +x desktop/backend-dist/backend-engine
           cd desktop
           npm run dist -- --mac --x64
 
       - name: Build Electron app (arm64)
         run: |
+          chmod +x desktop/backend-dist/backend-engine
           cd desktop
           npm run dist -- --mac --arm64
 
