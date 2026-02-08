@@ -4,17 +4,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  # Build backend binaries for each architecture
-  build-backend:
-    strategy:
-      matrix:
-        include:
-          - os: macos-12
-            arch: x64
-          - os: macos-14
-            arch: arm64
-    runs-on: ${{ matrix.os }}
-    
+  build-mac:
+    runs-on: macos-14  # Apple Silicon
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -24,6 +16,11 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
       - name: Install Python dependencies
         run: |
           pip install -r requirements.txt
@@ -31,42 +28,6 @@ jobs:
 
       - name: Bundle backend with PyInstaller
         run: python desktop/bundle_backend.py
-
-      - name: Rename backend for architecture
-        run: mv desktop/backend-dist desktop/backend-dist-${{ matrix.arch }}
-
-      - name: Upload backend artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend-${{ matrix.arch }}
-          path: desktop/backend-dist-${{ matrix.arch }}
-          retention-days: 1
-
-  # Build Electron app with both backends
-  build-electron:
-    needs: build-backend
-    runs-on: macos-14
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Download ARM64 backend
-        uses: actions/download-artifact@v4
-        with:
-          name: backend-arm64
-          path: desktop/backend-dist-arm64
-
-      - name: Download x64 backend
-        uses: actions/download-artifact@v4
-        with:
-          name: backend-x64
-          path: desktop/backend-dist-x64
 
       - name: Build frontend
         run: |
@@ -92,6 +53,6 @@ jobs:
       - name: Upload macOS app
         uses: actions/upload-artifact@v4
         with:
-          name: HumanitarianVideoEditor-macOS-Universal
+          name: HumanitarianVideoEditor-macOS
           path: desktop/dist/*.dmg
           retention-days: 30

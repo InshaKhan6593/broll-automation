@@ -19,39 +19,28 @@
     },
     "mac": {
       "target": ["dmg"],
-      "category": "public.app-category.video",
-      "identity": null,
-      "artifactName": "${productName}-${version}-macOS-Universal.${ext}"
+      "category": "public.app-category.video"
     },
-    "files": [
-      "main/**/*",
-      "preload/**/*",
-      "renderer/**/*",
-      "prompts/**/*",
-      "src/**/*"
-    ],
     "extraResources": [
       {
-        "from": "../backend",
-        "to": "backend",
-        "filter": [
-          "**/*",
-          "!venv/**/*",
-          "!__pycache__/**/*"
-        ]
+        "from": "backend-dist",
+        "to": "backend-dist",
+        "filter": ["**/*"]
       },
       {
-        "from": "backend-dist-arm64",
-        "to": "backend-dist-arm64"
+        "from": "renderer",
+        "to": "renderer",
+        "filter": ["**/*"]
       },
       {
-        "from": "backend-dist-x64",
-        "to": "backend-dist-x64"
+        "from": "prompts",
+        "to": "prompts",
+        "filter": ["**/*"]
       }
     ]
   },
   "devDependencies": {
-    "electron": "^31.0.0",
-    "electron-builder": "^24.13.3"
+    "electron": "^35.1.2",
+    "electron-builder": "^25.1.8"
   }
 }

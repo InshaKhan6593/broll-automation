@@ -68,11 +68,7 @@ function startBackend() {
     if (process.platform === 'win32') {
       command = path.join(process.resourcesPath, 'backend-dist', 'backend-engine.exe');
     } else if (process.platform === 'darwin') {
-      // macOS: detect architecture and use the correct binary
-      const arch = process.arch; // 'x64' or 'arm64'
-      const backendDir = `backend-dist-${arch}`;
-      command = path.join(process.resourcesPath, backendDir, 'backend-engine');
-      console.log(`Detected macOS ${arch}, using ${backendDir}`);
+      command = path.join(process.resourcesPath, 'backend-dist', 'backend-engine');
     } else {
       // Linux fallback
       command = path.join(process.resourcesPath, 'backend-dist', 'backend-engine');
