@@ -5,7 +5,14 @@ on:
 
 jobs:
   build-mac:
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: macos-13
+            arch: x64
+          - os: macos-14
+            arch: arm64
 
     steps:
       - name: Checkout code
@@ -15,11 +22,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          architecture: ${{ matrix.arch }}
 
-      - name: Setup Node.js 18
+      - name: Setup Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "20"
 
       - name: Install Python dependencies
         run: |
@@ -45,14 +53,14 @@ jobs:
           cd desktop
           npm install
 
-      - name: Build Electron app for macOS
+      - name: Build Electron app for macOS (${{ matrix.arch }})
         run: |
           cd desktop
-          npm run pack
+          npm run dist -- --mac --${{ matrix.arch }}
 
-      - name: Upload macOS app
+      - name: Upload macOS artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: HumanitarianVideoEditor-macOS
-          path: desktop/dist/mac*/
-          retention-days: 30
+          name: HumanitarianVideoEditor-macOS-${{ matrix.arch }}
+          path: desktop/dist/*.zip
+          retention-days: 5
