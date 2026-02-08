@@ -18,9 +18,10 @@
       "signAndEditExecutable": false
     },
     "mac": {
-      "target": ["zip", "dmg"],
+      "target": ["dmg"],
       "category": "public.app-category.video",
-      "identity": null
+      "identity": null,
+      "artifactName": "${productName}-${version}-macOS-Universal.${ext}"
     },
     "files": [
       "main/**/*",
@@ -40,8 +41,12 @@
         ]
       },
       {
-        "from": "backend-dist",
-        "to": "backend-dist"
+        "from": "backend-dist-arm64",
+        "to": "backend-dist-arm64"
+      },
+      {
+        "from": "backend-dist-x64",
+        "to": "backend-dist-x64"
       }
     ]
   },

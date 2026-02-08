@@ -65,8 +65,18 @@ function startBackend() {
 
   if (!isDev) {
     // In production, run the bundled executable (platform-aware)
-    const exeName = process.platform === 'win32' ? 'backend-engine.exe' : 'backend-engine';
-    command = path.join(process.resourcesPath, 'backend-dist', exeName);
+    if (process.platform === 'win32') {
+      command = path.join(process.resourcesPath, 'backend-dist', 'backend-engine.exe');
+    } else if (process.platform === 'darwin') {
+      // macOS: detect architecture and use the correct binary
+      const arch = process.arch; // 'x64' or 'arm64'
+      const backendDir = `backend-dist-${arch}`;
+      command = path.join(process.resourcesPath, backendDir, 'backend-engine');
+      console.log(`Detected macOS ${arch}, using ${backendDir}`);
+    } else {
+      // Linux fallback
+      command = path.join(process.resourcesPath, 'backend-dist', 'backend-engine');
+    }
     args = [];
   }
 
