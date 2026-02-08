@@ -8,7 +8,11 @@ def get_app_root():
     """Returns the root of the application source/binary."""
     if getattr(sys, 'frozen', False):
         # Bundled EXE (PyInstaller)
-        return Path(sys._MEIPASS)
+        if hasattr(sys, '_MEIPASS'):
+            # --onefile mode
+            return Path(sys._MEIPASS)
+        # --onedir mode
+        return Path(sys.executable).parent
     # Running from source
     return Path(__file__).parent.parent
 

@@ -58,8 +58,9 @@ function waitForBackend(retries = 30) {
 
 function startBackend() {
   console.log('Starting Python Backend...');
-
   const isDev = !app.isPackaged;
+  console.log(`Backend Mode: ${isDev ? 'Development' : 'Production'}`);
+
   let command = 'python';
   let args = [path.join(__dirname, '../../backend/main.py')];
 
